@@ -2,9 +2,9 @@
 
 Título del Proyecto: Sistema de gestion de pacientes de un consultorio dental.
 
-Descripcion: El proposito del proyecto es poner en practicas las cuestiones aprendidas en el curso de Python 2, se busca hacer un programa bien hecho que realice un CRUD, con la principal caracteristica de que contara con una conexion a una base de datos en Postgresql
+Descripción: El propósito del proyecto es poner en práctica las cuestiones aprendidas en el curso de Python 2, se busca hacer un programa bien hecho que realice un CRUD, con la principal característica de que contará con una conexión a una base de datos en Postgresql
 
-Instalacion: TO DO
+Instalación: TO DO
 
 Uso: TO DO
 
@@ -16,4 +16,4 @@ Contacto: ernestdreemurr@gmail.com
 
 Notas Adicionales: TO DO
 
-Estado del Proyecto: Version del proyecto: 0.1
+Estado del Proyecto: Versión del proyecto: 0.1
