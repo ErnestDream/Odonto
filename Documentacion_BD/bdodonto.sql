@@ -22,9 +22,16 @@ CREATE TABLE paciente(
 	primerApellido VARCHAR(50) NOT NULL,
 	segundoApellido VARCHAR(50) NOT NULL,
 	fechaNacimiento DATE NOT NULL,
+	idOdontologo NUMERIC(2,0) NOT NULL,
 	
 	CONSTRAINT pkPaciente
-	PRIMARY KEY (idPaciente)
+	PRIMARY KEY (idPaciente),
+	
+	CONSTRAINT fkPacienteOdontologo
+	FOREIGN KEY (idOdontologo)
+	REFERENCES odontologo(idOdontologo)
+	ON DELETE RESTRICT 
+	ON UPDATE CASCADE
 	);
 	
 CREATE TABLE consulta(
@@ -85,34 +92,14 @@ CREATE TABLE telefono (
 	ON UPDATE CASCADE
 	);
 	
-CREATE TABLE consultaxodontologo (
-	idConsulta NUMERIC(12,0) NOT NULL,
-	idOdontologo NUMERIC(2,0) NOT NULL,
-	
-	CONSTRAINT pkConsultaxodontologo
-	PRIMARY KEY (idConsulta, idOdontologo),
-	
-	CONSTRAINT fkconsultaxodontologoConsulta
-	FOREIGN KEY (idConsulta)
-	REFERENCES consulta(idConsulta)
-	ON DELETE RESTRICT 
-	ON UPDATE CASCADE,
-	
-	CONSTRAINT fkconsultaxodontologoOdontologo
-	FOREIGN KEY (idOdontologo)
-	REFERENCES odontologo(idOdontologo)
-	ON DELETE RESTRICT 
-	ON UPDATE CASCADE	
-	);
-	
 INSERT INTO odontologo (idOdontologo, nombre, primerApellido, segundoApellido, telefono, fechaNacimiento)
 VALUES (1, 'Mariana', 'González', 'Ramírez', '5551234567', '1985-06-15');
 
 INSERT INTO profesional (idOdontologo, institucion)
 VALUES (1, 'Universidad Nacional Autónoma de México');
 
-INSERT INTO paciente (idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento)
-VALUES (100001, 'Carlos', 'Hernández', 'López', '1990-04-20');
+INSERT INTO paciente (idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento, idOdontologo)
+VALUES (100001, 'Carlos', 'Hernández', 'López', '1990-04-20', 1);
 
 INSERT INTO telefono (idTelefono, telefono, idPaciente)
 VALUES (1, '5567894321', 100001);
@@ -120,17 +107,14 @@ VALUES (1, '5567894321', 100001);
 INSERT INTO consulta (idConsulta, fecha, horaInicio, horaFin, motivo, idPaciente)
 VALUES (100000000001, '2025-03-12', '10:00:00', '11:00:00', 'Revisión dental', 100001);
 
-INSERT INTO consultaxodontologo (idConsulta, idOdontologo)
-VALUES (100000000001, 1);
-
 INSERT INTO odontologo (idOdontologo, nombre, primerApellido, segundoApellido, telefono, fechaNacimiento)
 VALUES (2, 'Luis', 'Martínez', 'Díaz', '5559876543', '1998-08-25');
 
 INSERT INTO pasante (idOdontologo, institucion)
 VALUES (2, 'Instituto Politécnico Nacional');
 
-INSERT INTO paciente (idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento)
-VALUES (100002, 'Andrea', 'Pérez', 'Torres', '2001-11-30');
+INSERT INTO paciente (idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento, idOdontologo)
+VALUES (100002, 'Andrea', 'Pérez', 'Torres', '2001-11-30', 2);
 
 INSERT INTO telefono (idTelefono, telefono, idPaciente)
 VALUES (2, '5556667778', 100002);
@@ -138,5 +122,4 @@ VALUES (2, '5556667778', 100002);
 INSERT INTO consulta (idConsulta, fecha, horaInicio, horaFin, motivo, idPaciente)
 VALUES (100000000002, '2025-03-13', '12:30:00', '13:30:00', 'Limpieza dental', 100002);
 
-INSERT INTO consultaxodontologo (idConsulta, idOdontologo)
-VALUES (100000000002, 2);
+
