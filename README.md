@@ -7,6 +7,7 @@ Descripción: El propósito del proyecto es poner en práctica las cuestiones ap
 Instalación:
 * Descargar e instalar Postgresql
 * Descargar el script de sql de la documentacion, llamado "bdodonto.sql"
+* Instalar psycopg2 con el comado "pip install psycopg2"
 * Copia y pega el script de sql en psql (CLI de Postgres)
 * Descargar "Odonto.py"
     *Si tienes configuraciones distintas a las por default, cambialas por tus datos en el primer función
