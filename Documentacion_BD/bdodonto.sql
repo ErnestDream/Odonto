@@ -68,7 +68,7 @@ CREATE TABLE pasante (
 	
 CREATE TABLE profesional (
 	idOdontologo NUMERIC(2,0) NOT NULL,
-	institucion VARCHAR(255) NOt NULL,
+	cedula VARCHAR(255) NOt NULL,
 	
 	CONSTRAINT pkProfesional
 	PRIMARY KEY (idOdontologo),
@@ -91,35 +91,3 @@ CREATE TABLE telefono (
 	ON DELETE RESTRICT 
 	ON UPDATE CASCADE
 	);
-	
-INSERT INTO odontologo (idOdontologo, nombre, primerApellido, segundoApellido, telefono, fechaNacimiento)
-VALUES (1, 'Mariana', 'González', 'Ramírez', '5551234567', '1985-06-15');
-
-INSERT INTO profesional (idOdontologo, institucion)
-VALUES (1, 'Universidad Nacional Autónoma de México');
-
-INSERT INTO paciente (idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento, idOdontologo)
-VALUES (100001, 'Carlos', 'Hernández', 'López', '1990-04-20', 1);
-
-INSERT INTO telefono (idTelefono, telefono, idPaciente)
-VALUES (1, '5567894321', 100001);
-
-INSERT INTO consulta (idConsulta, fecha, horaInicio, horaFin, motivo, idPaciente)
-VALUES (100000000001, '2025-03-12', '10:00:00', '11:00:00', 'Revisión dental', 100001);
-
-INSERT INTO odontologo (idOdontologo, nombre, primerApellido, segundoApellido, telefono, fechaNacimiento)
-VALUES (2, 'Luis', 'Martínez', 'Díaz', '5559876543', '1998-08-25');
-
-INSERT INTO pasante (idOdontologo, institucion)
-VALUES (2, 'Instituto Politécnico Nacional');
-
-INSERT INTO paciente (idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento, idOdontologo)
-VALUES (100002, 'Andrea', 'Pérez', 'Torres', '2001-11-30', 2);
-
-INSERT INTO telefono (idTelefono, telefono, idPaciente)
-VALUES (2, '5556667778', 100002);
-
-INSERT INTO consulta (idConsulta, fecha, horaInicio, horaFin, motivo, idPaciente)
-VALUES (100000000002, '2025-03-13', '12:30:00', '13:30:00', 'Limpieza dental', 100002);
-
-
