@@ -10,7 +10,8 @@ Instalación:
 * Copia y pega el script de sql en psql (CLI de Postgres)
 * Descargar "Odonto.py"
     *Si tienes configuraciones distintas a las por default, cambialas por tus datos en el primer función
-    *Obvio, también hay que hacerlo para la contraseñá
+
+    *Obvio, también hay que hacerlo para la contraseña
 
 
 Uso:
