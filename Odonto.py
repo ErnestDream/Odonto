@@ -34,6 +34,7 @@ def conexionBD(dbname, user, password, host, port):
         print(f"Error al conectar a la base de datos: {e}")
         return None, None
 
+############################################# Clase de odontologo  ########################################################
 
 class Odontologo:
 
@@ -126,7 +127,7 @@ class Odontologo:
         conn.commit()
         return cursor.rowcount
 
-############################################# Clase de los pacientes  ########################################################
+############################################# Clase de paciente  ########################################################
 
 class Paciente:
     
@@ -214,8 +215,19 @@ class Paciente:
         cursor.execute(query, (idPaciente,))
         conn.commit()
         return cursor.rowcount
-    
+
+############################################# Clase de consulta  ########################################################
+
 class Consulta:
+
+    
+    """
+    Una clase que realiza las operaciones de CRUD para la tabla de consulta
+
+    Attributes:
+        
+    """
+
     def __init__(self, idConsulta, fecha, horaInicio, horaFin, motivo, idPaciente):
         self.idConsulta = idConsulta
         self.fecha = fecha
@@ -225,6 +237,11 @@ class Consulta:
         self.idPaciente = idPaciente
     
     def create(self, conn, cursor):
+
+        """
+        Metodo que inserta en la tabla de consulta los datos de un objeto
+        """
+
         query = """
         INSERT INTO consulta (idConsulta, fecha, horaInicio, horaFin, motivo, idPaciente)
         VALUES (%s, %s, %s, %s, %s, %s)
@@ -290,12 +307,25 @@ class Consulta:
         conn.commit()
         return cursor.rowcount
     
+############################################# Clase de pasante  ########################################################
+
 class Pasante:
+
+    """
+    Una clase que realiza las operaciones de CRUD para la tabla de pasante
+
+    Attributes:
+        
+    """
+
     def __init__(self, idOdontologo, institucion):
         self.idOdontologo = idOdontologo
         self.institucion = institucion
 
     def create(self, conn, cursor):
+        """
+        Metodo que inserta en la tabla de pasante los datos de un objeto
+        """
             
         query = """
         INSERT INTO pasante (idOdontologo, institucion)
@@ -348,13 +378,27 @@ class Pasante:
         conn.commit()
         return cursor.rowcount
             
+############################################# Clase de profesional  ########################################################
+
 class Profesional:
+
+    
+    """
+    Una clase que realiza las operaciones de CRUD para la tabla de profesional
+
+    Attributes:
+        
+    """
+
     def __init__(self, idOdontologo, cedula):
         self.idOdontologo = idOdontologo
         self.cedula = cedula
 
     def create(self, conn, cursor):
-            
+        """
+        Metodo que inserta en la tabla de profesional los datos de un objeto
+        """
+
         query = """
         INSERT INTO profesional (idOdontologo, cedula)
         VALUES (%s, %s)
@@ -406,13 +450,25 @@ class Profesional:
         conn.commit()
         return cursor.rowcount
     
+############################################# Clase de telefono  ########################################################
+
 class Telefono:
+    
+    """
+    Una clase que realiza las operaciones de CRUD para la tabla de telefono
+
+    Attributes:
+        
+    """
     def __init__(self, idTelefono, telefono, idPaciente):
         self.idTelefono = idTelefono
         self.telefono = telefono
         self.idPaciente = idPaciente
 
     def create(self, conn, cursor):
+        """
+        Metodo que inserta en la tabla de create los datos de un objeto
+        """
             
         query = """
         INSERT INTO telefono (idTelefono, telefono, idPaciente)
@@ -468,6 +524,13 @@ class Telefono:
         conn.commit()
         return cursor.rowcount
 
+############################################# Clase de objeto  ########################################################
+
+"""
+    Objeto que funcion para la conexion de a la base de datos
+
+    ------------------------> MODIFICAR AQUI <------------------------
+"""
 conn, cursor = conexionBD(
     dbname = 'odontodos',
     user = 'postgres',
@@ -476,7 +539,7 @@ conn, cursor = conexionBD(
     port = '5432'
 )
 
-############################################# Insertar datos  ########################################################
+############################################# Insertar datos odontologo  ########################################################
 
 # Verificar que la conexión y el cursor sean válidos
 #if conn and cursor:
@@ -492,7 +555,7 @@ conn, cursor = conexionBD(
 
 #odontologo.create(conn, cursor)
 
-############################################# Seleccionar datos  ########################################################
+############################################# Seleccionar datos odontologo ########################################################
 
 #resultado = Odontologo.read(cursor, idOdontologo=1)
 #if resultado:
@@ -504,7 +567,7 @@ conn, cursor = conexionBD(
 #else:
 #    print("No se encontró ningún odontólogo con ese ID.")
 
-############################################# Actualizar datos  ########################################################
+############################################# Actualizar datos odontologo ########################################################
     
 #odontologo = Odontologo(
 #    idOdontologo=1,                      # ID del odontólogo a actualizar
@@ -517,7 +580,7 @@ conn, cursor = conexionBD(
 
 #odontologo.update(conn, cursor, odontologo)
 
-############################################# Eliminar datos  ########################################################
+############################################# Eliminar datos odontologo ########################################################
 
 
 #Odontologo.delete(conn, cursor, idOdontologo=9)
