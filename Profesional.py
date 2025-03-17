@@ -1,6 +1,5 @@
 import psycopg2
 
-
 class Profesional:
 
     
@@ -8,16 +7,21 @@ class Profesional:
     Una clase que realiza las operaciones de CRUD para la tabla de profesional
 
     Attributes:
+        IdOdontologo: El id del odontólogo que es profesional
+        Cedula: La cedula del odontólogo que es profesional
         
     """
 
     def __init__(self, idOdontologo, cedula):
+        """
+        Inicializa los atributos de la clase
+        """
         self.idOdontologo = idOdontologo
         self.cedula = cedula
 
     def create(self, conn, cursor):
         """
-        Metodo que inserta en la tabla de profesional los datos de un objeto
+        Método que inserta en la tabla de profesional los datos de un objeto
         """
 
         query = """
@@ -36,13 +40,19 @@ class Profesional:
     
     @staticmethod
     def read(cursor, idOdontologo):
+        """	
+        Método selección de la tabla, o lectura de los datos si lo prefieres
+        """
         query='SELECT * FROM profesional WHERE idOdontologo = %s ;'
         cursor.execute(query, (idOdontologo, ))
         return cursor.fetchone()
     
     def update(self, conn, cursor, profesional):
+        """	
+        Método actualización de la tupla, o actualizacion de los datos
+        """
         resultado = Profesional.read(cursor, self.idOdontologo)
-        print("Datos del profesional:")
+        print("Datos actuales del profesional:")
         print(f"Cedula: {resultado[1]}")
         
         query = """
@@ -54,13 +64,17 @@ class Profesional:
         
         print("Cambios guardados correctamente.")
         resultado = Profesional.read(cursor, self.idOdontologo)
-        print("Datos del profesional:")
+        print("Nuevos datos del profesional:")
         print(f"Cedula: {resultado[1]}")
         
         conn.commit()
         return cursor.fetchone()
     
+    @staticmethod
     def delete(conn, cursor, idOdontologo):
+        """"
+        Método que borra un objeto de la tabla profesional
+        """
         print("Datos borrados:")
         resultado = Profesional.read(cursor, idOdontologo)
         print("Datos del profesional:")

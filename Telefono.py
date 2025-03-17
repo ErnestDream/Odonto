@@ -7,16 +7,23 @@ class Telefono:
     Una clase que realiza las operaciones de CRUD para la tabla de telefono
 
     Attributes:
+        idTelefono: El id del telefono
+        telefono: El número de teléfono
+        idPaciente: El id del paciente al que pertenece el teléfono
         
     """
     def __init__(self, idTelefono, telefono, idPaciente):
+        """	
+        Inicializa los atributos de la clase
+        """
+
         self.idTelefono = idTelefono
         self.telefono = telefono
         self.idPaciente = idPaciente
 
     def create(self, conn, cursor):
         """
-        Metodo que inserta en la tabla de create los datos de un objeto
+        Método que inserta en la tabla de create los datos de un objeto introducido por el usuario
         """
             
         query = """
@@ -33,17 +40,21 @@ class Telefono:
         except psycopg2.Error as e:
             print(f"Error al insertar el telefono: {e}")
         
-    
     @staticmethod
     def read(cursor, idTelefono):
+        """
+        Método selección de la tabla, o lectura de los datos si lo prefieres
+        """
         query='SELECT * FROM telefono WHERE idTelefono = %s ;'
         cursor.execute(query, (idTelefono, ))
         return cursor.fetchone()
         
-    
     def update(self, conn, cursor, telefono):
+        """
+        Método actualización de la tupla, o actualizacion de los datos
+        """
         resultado = Telefono.read(cursor, self.idTelefono)
-        print("Datos del telefono:")
+        print("Datos actuales del telefono:")
         print(f"Telefono: {resultado[1]}")
         
         query = """
@@ -55,14 +66,17 @@ class Telefono:
         
         print("Cambios guardados correctamente.")
         resultado = Telefono.read(cursor, self.idTelefono)
-        print("Datos del telefono:")
+        print("Nuevos datos del telefono:")
         print(f"Telefono: {resultado[1]}")
         
         conn.commit()
         return cursor.fetchone()
         
-    
+    @staticmethod
     def delete(conn, cursor, idTelefono):
+        """"
+        Método que borra un objeto de la tabla telefono
+        """
         resultado = Telefono.read(cursor, idTelefono)
         if resultado:
             print("Datos borrados del teléfono del paciente:")

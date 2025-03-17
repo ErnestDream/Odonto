@@ -1,6 +1,4 @@
-
 import psycopg2
-
 
 class Paciente:
     
@@ -8,10 +6,19 @@ class Paciente:
     Una clase que realiza las operaciones de CRUD para la tabla de paciente
 
     Attributes:
+        IdPaciente: El id del paciente
+        Nombre: El nombre del paciente
+        PrimerApellido: El primer apellido del paciente
+        SegundoApellido: El segundo apellido del paciente
+        FechaNacimiento: La fecha de nacimiento del paciente
+        IdOdontologo: El id del odontólogo que atiende al paciente
         
     """
 
     def __init__(self, idPaciente, nombre, primerApellido, segundoApellido, fechaNacimiento, idOdontologo):
+        """
+        Inicializa los atributos de la clase
+        """
         self.idPaciente = idPaciente
         self.nombre = nombre
         self.primerApellido = primerApellido
@@ -40,20 +47,23 @@ class Paciente:
         except psycopg2.Error as e:
             print(f"Error al insertar el paciente: {e}")
 
-    #--->   Metodo seleccion de la tabla, o lectura de los datos si lo prefieres <---#
-
     @staticmethod
     def read(cursor, idPaciente):
+        """
+        Método selección de la tabla, o lectura de los datos si lo prefieres
+        """
         query='SELECT * FROM paciente WHERE idPaciente = %s ;'
         cursor.execute(query, (idPaciente, ))
         return cursor.fetchone()
 
-    #--->   Metodo actualizacion de la tupla, o actualizacion de los datos  <---#
-
     def update(self, conn, cursor, paciente):
-        
+        """	
+        Método que actualiza en la tabla de paciente los datos de un objeto
+        """
+
+
         resultado = Paciente.read(cursor, self.idPaciente)
-        print("Datos del paciente:")
+        print("Datos del paciente actuales:")
         print(f"Nombre: {resultado[1]} {resultado[2]} {resultado[3]}")
         print(f"Teléfono: {resultado[4]}")
         print(f"Fecha de nacimiento: {resultado[5]}")
@@ -67,7 +77,7 @@ class Paciente:
                                 self.fechaNacimiento, self.idPaciente))
         
         resultado = Paciente.read(cursor, self.idPaciente)
-        print("Datos del paciente:")
+        print("Cambios en los datos del paciente:")
         print(f"Nombre: {resultado[1]} {resultado[2]} {resultado[3]}")
         print(f"Teléfono: {resultado[4]}")
         print(f"Fecha de nacimiento: {resultado[5]}")
@@ -75,8 +85,11 @@ class Paciente:
         conn.commit()
         return cursor.fetchone()
     
+    @staticmethod
     def delete(conn, cursor, idPaciente):
-
+        """"
+        Método que borra en la tabla de paciente los datos de un objeto
+        """
         print("Datos borrados:")
         resultado = Paciente.read(cursor, idPaciente)
         print("Datos del paciente:")

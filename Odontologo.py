@@ -1,18 +1,23 @@
-
 import psycopg2
-
 
 class Odontologo:
 
     """
-    Una clase que realiza las operaciones de CRUD para la tabla de odontologo
+    Una clase que realiza las operaciones de CRUD para la tabla de odontólogo
 
     Attributes:
+        idOdontologo: El id del odontólogo
+        nombre: El nombre del odontólogo
+        primerApellido: El primer apellido del odontólogo
+        segundoApellido: El segundo apellido del odontólogo
+        telefono: El télefono del odontólogo
+        fechaNacimiento: La fecha de nacimiento del odontólogo
         
     """
-
-
     def __init__(self, idOdontologo, nombre, primerApellido, segundoApellido, telefono, fechaNacimiento):
+        """
+        Inicializa los atributos de la clase
+        """
         self.idOdontologo = idOdontologo
         self.nombre = nombre
         self.primerApellido = primerApellido
@@ -23,7 +28,7 @@ class Odontologo:
     def create(self, conn, cursor):
 
         """
-        Metodo que inserta en la tabla de odontologo los datos de un objeto
+        Metodo que inserta en la tabla de odontólogo los datos de un objeto
         """
 
         query = """
@@ -40,20 +45,22 @@ class Odontologo:
         except psycopg2.Error as e:
             print(f"Error al insertar el odontólogo: {e}")
 
-    #--->   Metodo seleccion de la tabla, o lectura de los datos si lo prefieres <---#
-
     @staticmethod
     def read(cursor, idOdontologo):
+        """
+        Método seleccion de la tabla, o lectura de los datos si lo prefieres 
+        """
         query='SELECT * FROM odontologo WHERE idOdontologo = %s ;'
         cursor.execute(query, (idOdontologo, ))
         return cursor.fetchone()
 
-    #--->   Metodo actualizacion de la tupla, o actualizacion de los datos  <---#
-
     def update(self, conn, cursor, odontologo):
-        
+        """
+        Método actualización de la tupla, o actualizacion de los datos
+        """
+
         resultado = Odontologo.read(cursor, self.idOdontologo)
-        print("Datos del odontólogo:")
+        print("Datos actuales del odontólogo:")
         print(f"Nombre: {resultado[1]} {resultado[2]} {resultado[3]}")
         print(f"Teléfono: {resultado[4]}")
         print(f"Fecha de nacimiento: {resultado[5]}")
@@ -68,7 +75,7 @@ class Odontologo:
         
         print("Cambios guardados correctamente.")
         resultado = Odontologo.read(cursor, self.idOdontologo)
-        print("Datos del odontólogo:")
+        print("Nuevos datos del odontólogo:")
         print(f"Nombre: {resultado[1]} {resultado[2]} {resultado[3]}")
         print(f"Teléfono: {resultado[4]}")
         print(f"Fecha de nacimiento: {resultado[5]}")
@@ -76,11 +83,11 @@ class Odontologo:
         conn.commit()
         return cursor.fetchone()
 
-    #--->   Metodo eliminacion de la tupla, o lectura de los datos si lo prefieres <---#
-
     @staticmethod
     def delete(conn, cursor, idOdontologo):
-
+        """
+        Método eliminacion de la tupla, o lectura de los datos si lo prefieres
+        """
         print("Datos borrados:")
         resultado = Odontologo.read(cursor, idOdontologo)
         print("Datos del odontólogo:")
