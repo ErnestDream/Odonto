@@ -27,4 +27,4 @@ Contacto: ernestdreemurr@gmail.com
 
 Notas Adicionales: Instalar las extensiones de Python en VS necesarias (Python, Python Debugger, Pylance)
 
-Estado del Proyecto: Versión del proyecto: 1.2
+Estado del Proyecto: Versión del proyecto: 1.3
