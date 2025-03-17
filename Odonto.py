@@ -41,8 +41,6 @@ def conexionBD(dbname, user, password, host, port):
         print(f"Error al conectar a la base de datos: {e}")
         return None, None
 
-############################################# Clase de objeto  ########################################################
-
 """
     Objeto que funcion para la conexion de a la base de datos
 
@@ -59,6 +57,10 @@ conn, cursor = conexionBD(
 class Menu:
     @staticmethod
     def mostrar_menu_principal():
+        """	
+        Muestra el menú principal de la aplicación.
+        """
+
         print("\n--- Menú Principal ---")
         print("1. Operaciones CRUD para Odontólogo")
         print("2. Operaciones CRUD para Paciente")
@@ -70,6 +72,10 @@ class Menu:
 
     @staticmethod
     def mostrar_menu_crud(nombre_clase):
+        """
+        Muestra el menú CRUD para la clase especificada.
+        """
+
         print(f"\n--- Menú CRUD para {nombre_clase} ---")
         print("1. Crear")
         print("2. Leer")
@@ -79,6 +85,11 @@ class Menu:
 
     @staticmethod
     def ejecutar_menu_principal():
+
+        """
+        Ejecuta el menú principal de la aplicación dependiendo de las opciones dadas por el usuario.
+        """
+
         while True:
             Menu.mostrar_menu_principal()
             opcion = input("Selecciona una opción: ")
@@ -103,6 +114,10 @@ class Menu:
 
     @staticmethod
     def ejecutar_menu_crud(nombre_clase):
+        """
+        Ejecuta alguna de las operaciones CRUD para la clase especificada con la opción dada por el usuario.
+        """
+
         while True:
             Menu.mostrar_menu_crud(nombre_clase)
             opcion = input("Selecciona una opción: ")
