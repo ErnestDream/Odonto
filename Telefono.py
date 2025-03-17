@@ -64,7 +64,7 @@ class Telefono:
     
     def delete(conn, cursor, idTelefono):
         print("Datos borrados:")
-        resultado = Telefono.read(cursor, idTelefono)
+        Telefono.read(cursor, idTelefono)
         
         query = "DELETE FROM telefono WHERE idTelefono = %s"
         cursor.execute(query, (idTelefono,))
