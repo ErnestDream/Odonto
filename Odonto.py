@@ -541,22 +541,36 @@ class Menu:
         id_registro = input(f"Ingresa el ID del {nombre_clase} a eliminar: ")
         
         if nombre_clase == "Odontólogo":
-            Odontologo.delete(conn, cursor, id_registro)
-
+            if Odontologo.delete(conn, cursor, id_registro):
+                print("Odontólogo eliminado correctamente.")
+            else:
+                print("No se pudo eliminar el odontólogo.")
         elif nombre_clase == "Paciente":
-            Paciente.delete(conn, cursor, id_registro)
-
+            if Paciente.delete(conn, cursor, id_registro):
+                print("Paciente eliminado correctamente.")
+            else:
+                print("No se pudo eliminar el paciente.")
         elif nombre_clase == "Consulta":
-            Consulta.delete(conn, cursor, id_registro)
-
+            if Consulta.delete(conn, cursor, id_registro):
+                print("Consulta eliminada correctamente.")
+            else:
+                print("No se pudo eliminar la consulta.")
         elif nombre_clase == "Pasante":
-            Pasante.delete(conn, cursor, id_registro)
-            
+            if Pasante.delete(conn, cursor, id_registro):
+                print("Pasante eliminado correctamente.")
+            else:
+                print("No se pudo eliminar el pasante.")
         elif nombre_clase == "Profesional":
-            Profesional.delete(conn, cursor, id_registro)
+            if Profesional.delete(conn, cursor, id_registro):
+                print("Profesional eliminado correctamente.")
+            else:
+                print("No se pudo eliminar el profesional.")
             
         elif nombre_clase == "Teléfono":
-            Telefono.delete(conn, cursor, id_registro)
+            if Telefono.delete(conn, cursor, id_registro):
+                print("Teléfono eliminado correctamente.")
+            else:
+                print("No se pudo eliminar el teléfono.")
         
         else:
             print(f"Operación no implementada para {nombre_clase}.")

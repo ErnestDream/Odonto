@@ -1,5 +1,5 @@
 import psycopg2
-
+from psycopg2 import errors
 
 class Telefono:
     
@@ -24,6 +24,10 @@ class Telefono:
     def create(self, conn, cursor):
         """
         Método que inserta en la tabla de create los datos de un objeto introducido por el usuario
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
         """
             
         query = """
@@ -44,6 +48,11 @@ class Telefono:
     def read(cursor, idTelefono):
         """
         Método selección de la tabla, o lectura de los datos si lo prefieres
+        Args:
+            cursor: El cursor de la conexión a la base de datos
+            idTelefono: El id del telefono a buscar
+        Returns:
+            cursor.fetchone() : La tupla con los datos del telefono
         """
         query='SELECT * FROM telefono WHERE idTelefono = %s ;'
         cursor.execute(query, (idTelefono, ))
@@ -52,6 +61,11 @@ class Telefono:
     def update(self, conn, cursor, telefono):
         """
         Método actualización de la tupla, o actualizacion de los datos
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
+            cursor.fetchone() : La tupla con los datos del
         """
         resultado = Telefono.read(cursor, self.idTelefono)
         print("Datos actuales del telefono:")
@@ -76,17 +90,25 @@ class Telefono:
     def delete(conn, cursor, idTelefono):
         """"
         Método que borra un objeto de la tabla telefono
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            idTelefono: El id del telefono a borrar
+        Returns:
+            bool: True si se borra el telefono, False si no se borra    
         """
-        resultado = Telefono.read(cursor, idTelefono)
-        if resultado:
-            print("Datos borrados del teléfono del paciente:")
-            print(f"ID: {resultado[0]}")
-            print(f"Número de telélefono: {resultado[1]}")
-            print(f"Paciente al que pertenece: {resultado[2]}")
-        
-        query = "DELETE FROM telefono WHERE idTelefono = %s"
-        cursor.execute(query, (idTelefono,))
-        conn.commit()
-        return cursor.rowcount
+        try:
+            if cursor.rowcount > 0:
+                query = "DELETE FROM telefono WHERE idTelefono = %s"
+                cursor.execute(query, (idTelefono,))
+                conn.commit()
+                cursor.rowcount
+                return True
+            else:
+                print("No se encontró el telefono con el id proporcionado.")
+                return False
+        except errors.ForeignKeyViolation as e:
+            print(f"Error al borrar el telefono: {e}")
+            return False
 
 

@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import errors
 
 class Profesional:
 
@@ -22,6 +23,10 @@ class Profesional:
     def create(self, conn, cursor):
         """
         Método que inserta en la tabla de profesional los datos de un objeto
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
         """
 
         query = """
@@ -42,6 +47,11 @@ class Profesional:
     def read(cursor, idOdontologo):
         """	
         Método selección de la tabla, o lectura de los datos si lo prefieres
+        Args:
+            cursor: El cursor de la conexión a la base de datos
+            idOdontologo: El id del odontologo a buscar
+        Returns:
+            cursor.fetchone() : La tupla con los datos del profesional
         """
         query='SELECT * FROM profesional WHERE idOdontologo = %s ;'
         cursor.execute(query, (idOdontologo, ))
@@ -50,6 +60,12 @@ class Profesional:
     def update(self, conn, cursor, profesional):
         """	
         Método actualización de la tupla, o actualizacion de los datos
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            profesional: El objeto con los datos actualizados
+        Returns:
+            cursor.fetchone() : La tupla con los datos del profesional
         """
         resultado = Profesional.read(cursor, self.idOdontologo)
         print("Datos actuales del profesional:")
@@ -74,13 +90,23 @@ class Profesional:
     def delete(conn, cursor, idOdontologo):
         """"
         Método que borra un objeto de la tabla profesional
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            idOdontologo: El id del odontólogo que es profesional
+        Returns:
+            bool: True si se borra el profesional, False si no
         """
-        print("Datos borrados:")
-        resultado = Profesional.read(cursor, idOdontologo)
-        print("Datos del profesional:")
-        print(f"Institucion: {resultado[1]}")
-        
-        query = "DELETE FROM profesional WHERE idOdontologo = %s"
-        cursor.execute(query, (idOdontologo,))
-        conn.commit()
-        return cursor.rowcount
+        try:
+            if cursor.rowcount > 0:
+                query = "DELETE FROM profesional WHERE idOdontologo = %s"
+                cursor.execute(query, (idOdontologo,))
+                conn.commit()
+                cursor.rowcount
+                return True
+            else:
+                print("No se encontró el profesional con el id proporcionado.")
+                return False
+        except errors.ForeignKeyViolation as e:
+            print(f"Error al borrar el profesional: {e}")
+            return False    

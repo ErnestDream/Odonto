@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import errors
 
 class Pasante:
 
@@ -20,6 +21,10 @@ class Pasante:
     def create(self, conn, cursor):
         """
         Metodo que inserta en la tabla de pasante los datos de un objeto
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
         """
             
         query = """
@@ -40,6 +45,11 @@ class Pasante:
     def read(cursor, idOdontologo):
         """	
         Método selección de la tabla, o lectura de los datos si lo prefieres
+        Args:
+            cursor: El cursor de la conexión a la base de datos
+            idOdontologo: El id del odontologo a buscar
+        Returns:
+            cursor.fetchone() : La tupla con los datos del pasante
         """
         query='SELECT * FROM pasante WHERE idOdontologo = %s ;'
         cursor.execute(query, (idOdontologo, ))
@@ -48,6 +58,11 @@ class Pasante:
     def update(self, conn, cursor, pasante):
         """	
         Método actualización de la tupla, o actualizacion de los datos
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
+            cursor.fetchone() : La tupla con los datos del pasante
         """
         resultado = Pasante.read(cursor, self.idOdontologo)
         print("Datos actuales del pasante:")
@@ -72,13 +87,23 @@ class Pasante:
     def delete(conn, cursor, idOdontologo):
         """
         Método que borra una tupla de la tabla pasante
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            idOdontologo: El id del odontologo a borrar
+        Returns:
+            bool: True si se borra la tupla, False en caso contrario
         """
-        print("Datos borrados:")
-        resultado = Pasante.read(cursor, idOdontologo)
-        print("Datos del pasante:")
-        print(f"Institucion: {resultado[1]}")
-        
-        query = "DELETE FROM pasante WHERE idOdontologo = %s"
-        cursor.execute(query, (idOdontologo,))
-        conn.commit()
-        return cursor.rowcount
+        try:
+            if cursor.rowcount > 0:
+                query = "DELETE FROM pasante WHERE idOdontologo = %s"
+                cursor.execute(query, (idOdontologo,))
+                conn.commit()
+                cursor.rowcount
+                return True
+            else:
+                print("No se encontró el pasante.")
+                return False
+        except errors.ForeignKeyViolation as e:
+            print(f"Error al borrar el pasante: {e}")
+            return False

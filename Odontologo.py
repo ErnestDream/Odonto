@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import errors
 
 class Odontologo:
 
@@ -29,6 +30,10 @@ class Odontologo:
 
         """
         Metodo que inserta en la tabla de odontólogo los datos de un objeto
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
         """
 
         query = """
@@ -49,6 +54,11 @@ class Odontologo:
     def read(cursor, idOdontologo):
         """
         Método seleccion de la tabla, o lectura de los datos si lo prefieres 
+        Args:
+            cursor: El cursor de la conexión a la base de datos
+            idOdontologo: El id del odontólogo a buscar
+        Returns:
+            cursor.fetchone(): La tupla con los datos del odontólogo
         """
         query='SELECT * FROM odontologo WHERE idOdontologo = %s ;'
         cursor.execute(query, (idOdontologo, ))
@@ -57,6 +67,13 @@ class Odontologo:
     def update(self, conn, cursor, odontologo):
         """
         Método actualización de la tupla, o actualizacion de los datos
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            odontologo: El objeto con los datos actualizados
+        Returns:
+            cursor.fetchone(): La tupla con los datos del odontólogo
+
         """
 
         resultado = Odontologo.read(cursor, self.idOdontologo)
@@ -87,15 +104,28 @@ class Odontologo:
     def delete(conn, cursor, idOdontologo):
         """
         Método eliminacion de la tupla, o lectura de los datos si lo prefieres
-        """
-        print("Datos borrados:")
-        resultado = Odontologo.read(cursor, idOdontologo)
-        print("Datos del odontólogo:")
-        print(f"Nombre: {resultado[1]} {resultado[2]} {resultado[3]}")
-        print(f"Teléfono: {resultado[4]}")
-        print(f"Fecha de nacimiento: {resultado[5]}")
 
-        query = "DELETE FROM odontologo WHERE idOdontologo = %s"
-        cursor.execute(query, (idOdontologo,))
-        conn.commit()
-        return cursor.rowcount
+        Args:   
+            idOdontologo: El id del odontólogo a eliminar
+            cursor: El cursor de la conexión a la base de datos
+            conn: La conexión a la base de datos
+
+        Returns:
+            
+        """
+        try:
+            if cursor.rowcount > 0:
+
+                query = "DELETE FROM odontologo WHERE idOdontologo = %s"
+                cursor.execute(query, (idOdontologo,))
+                conn.commit()
+                cursor.rowcount
+                return True
+            else:
+                print("No se encontró el odontólogo con el id proporcionado.")
+                return False
+        
+        except errors.ForeignKeyViolation as e:
+            print("Error al borrar el odontólogo: ", e)
+
+            return False

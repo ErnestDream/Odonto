@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import Error
 
 class Consulta:
 
@@ -31,6 +32,12 @@ class Consulta:
 
         """
         Método que inserta en la tabla de consulta los datos de un objeto
+    
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+        Returns:
+        
         """
 
         query = """
@@ -51,6 +58,12 @@ class Consulta:
     def read(cursor, idConsulta):
         """	
         Método selección de la tabla, o lectura de los datos si lo prefieres
+
+        args:
+            cursor: El cursor de la base de datos
+            idConsulta: El id de la consulta a leer
+        Returns:
+            cursor.fetchone(): La fila
         """
         query='SELECT * FROM consulta WHERE idConsulta = %s ;'
         cursor.execute(query, (idConsulta, ))
@@ -59,6 +72,13 @@ class Consulta:
     def update(self, conn, cursor, consulta):
         """
         Método que actualiza en la tabla de consulta los datos de un objeto
+
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            consulta: El objeto con los datos actualizados  
+        Returns:
+            cursor.fetchone(): La fila actualizada
         """
         resultado = Consulta.read(cursor, self.idConsulta)
         print("Datos actuales de la consulta:")
@@ -92,17 +112,24 @@ class Consulta:
     def delete(conn, cursor, idConsulta):
         """
         Método que borra de la tabla de consulta los datos de un objeto
+
+        Args:
+            conn: La conexión a la base de datos
+            cursor: El cursor de la base de datos
+            idConsulta: El id de la consulta a borrar
+        Returns:
+            cursor.rowcount: El número de filas afectadas
         """
-        print("Datos borrados:")
-        resultado = Consulta.read(cursor, idConsulta)
-        print("Datos de la consulta:")
-        print(f"Fecha: {resultado[1]}")
-        print(f"Hora de inicio: {resultado[2]}")
-        print(f"Hora de fin: {resultado[3]}")
-        print(f"Motivo: {resultado[4]}")
-        print(f"ID Paciente: {resultado[5]}")
-        
-        query = "DELETE FROM consulta WHERE idConsulta = %s"
-        cursor.execute(query, (idConsulta,))
-        conn.commit()
-        return cursor.rowcount
+        try:
+            if cursor.rowcount > 0:
+                query = "DELETE FROM consulta WHERE idConsulta = %s"
+                cursor.execute(query, (idConsulta,))
+                conn.commit()
+                cursor.rowcount
+                return True
+            else:
+                print("No se encontró la consulta.")
+                return False
+        except psycopg2.Error as e:
+            print("Error al borrar la consulta: ", e)
+            return False
