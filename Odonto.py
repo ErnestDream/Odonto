@@ -89,7 +89,7 @@ def validar_longitud(texto, longitud):
     """
     Valida que el texto tenga la longitud especificada.
     """
-    if len(texto) != longitud:
+    if len(texto) > longitud:
         return False
     return True
 
@@ -97,6 +97,23 @@ def validar_fecha(fecha):
     if not re.match(r"^(?:19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$", fecha):
         return False
     return True
+
+def id_automatico(idTabla, nombreTabla):
+    """
+    Genera un ID automático para los registros.
+    Args:
+        idTabla (string):   nombre del campo ID
+        nombreTabla (string):   nombre de la tabla
+    Returns:
+        int:    El siguiente ID disponible
+    """
+    query = f"SELECT MAX({idTabla}) FROM {nombreTabla};"
+    cursor.execute(query)
+    id_ultimo = cursor.fetchone()
+    
+    if id_ultimo and id_ultimo[0] is not None:
+        return id_ultimo[0] + 1
+    return 1
 
 class Menu:
     @staticmethod
@@ -187,7 +204,7 @@ class Menu:
         """
         if nombre_clase == "Odontólogo":
             odontologo = Odontologo(
-                idOdontologo=input("ID: "),
+                idOdontologo=id_automatico("idOdontologo", "odontologo"),
                 nombre=input("Nombre: "),
                 primerApellido=input("Primer apellido: "),
                 segundoApellido=input("Segundo apellido: "),
@@ -201,9 +218,6 @@ class Menu:
                 return
             if not validar_telefono(odontologo.telefono):
                 print("Número de teléfono inválido. Debe contener 10 dígitos. Intenta de nuevo.")
-                return
-            if not validar_id(odontologo.idOdontologo):
-                print("ID inválido. Debe contener solo dígitos. Intenta de nuevo.")
                 return
             if not validar_longitud(odontologo.nombre, 120) and not validar_longitud(odontologo.primerApellido, 50) and not validar_longitud(odontologo.segundoApellido, 50):
                 print("Nombre o apellidos inválidos, los nombres o apellidos no son tan largos, creo. Intenta de nuevo.")
@@ -219,7 +233,7 @@ class Menu:
             if conn and cursor:
             # Crear un objeto paciente con los datos
                 paciente = Paciente(
-                idPaciente=input("ID: "),
+                idPaciente=id_automatico("idPaciente", "paciente"),
                 nombre=input("Nombre: "),             
                 primerApellido=input("Primer apellido: "),
                 segundoApellido=input("Segundo apellido: "),
@@ -231,7 +245,7 @@ class Menu:
             if not validar_nombre(paciente.nombre) and not validar_nombre(paciente.primerApellido) and not validar_nombre(paciente.segundoApellido):
                 print("Nombre o apellidos inválidos, los nombres o apellidos no deben de llevar números o carácteres especiales. Intenta de nuevo.")
                 return
-            if not validar_id(paciente.idPaciente) and not validar_id(paciente.idOdontologo):
+            if not validar_id(paciente.idOdontologo):
                 print("ID inválido. Debe contener solo dígitos. Intenta de nuevo.")
             if not validar_longitud(paciente.nombre, 120) and not validar_longitud(paciente.primerApellido, 50) and not validar_longitud(paciente.segundoApellido, 50):
                 print("Nombre o apellidos inválidos, los nombres o apellidos no son tan largos, creo. Intenta de nuevo.")
@@ -239,6 +253,8 @@ class Menu:
             if not validar_fecha(paciente.fechaNacimiento):
                 print("Fecha inválida. Debe contener solo dígitos en el formato (YYYY-MM-DD). Intenta de nuevo.")
                 return
+            
+            
 
             paciente.create(conn, cursor)
 
@@ -247,7 +263,7 @@ class Menu:
             if conn and cursor:
                 # Crear un objeto Consulta con los datos de prueba
                 consulta = Consulta(
-                idConsulta=input("ID: "),
+                idConsulta=id_automatico("idConsulta", "consulta"),
                 fecha=input("Fecha: "),
                 horaInicio=input("Hora de inicio: "),
                 horaFin=input("Hora de fin: "),
@@ -256,9 +272,6 @@ class Menu:
             )
             
             #Validaciones de tipos de datos
-            if not validar_id(consulta.idConsulta) and not validar_id(consulta.idPaciente):
-                print("ID inválido. Debe contener solo dígitos. Intenta de nuevo.")
-                return
             if not valida_hora(consulta.horaInicio) and not valida_hora(consulta.horaFin):
                 print("Hora inválida. Debe contener solo dígitos en el formato (HH:MM). Intenta de nuevo.")
                 return
@@ -301,13 +314,13 @@ class Menu:
             if conn and cursor:
                 # Crear un objeto Odontologo con los datos de prueba
                 telefono = Telefono(
-                idTelefono=input("ID: "),
+                idTelefono=id_automatico("idTelefono", "telefono"),
                 telefono=input("Número de télefono: "),
                 idPaciente=input("ID del paciente al que pertenece: ")
             )
 
             #Validaciones de tipos de datos
-            if not validar_id(telefono.idTelefono) and not validar_id(telefono.idPaciente):
+            if not validar_id(telefono.idPaciente):
                 print("ID inválido. Debe contener solo dígitos. Intenta de nuevo.")
                 return
             if not validar_telefono(telefono.telefono):
@@ -398,6 +411,10 @@ class Menu:
         """
         id_registro = input(f"Ingresa el ID del {nombre_clase} a actualizar: ")
         
+        if not validar_id(id_registro):
+                print("ID inválido. Debe contener solo dígitos. Intenta de nuevo.")
+                return
+
         if nombre_clase == "Odontólogo":
             odontologo = Odontologo(
                 idOdontologo=id_registro,                      # ID del odontólogo a actualizar
@@ -415,9 +432,7 @@ class Menu:
             if not validar_telefono(odontologo.telefono):
                 print("Número de teléfono inválido. Debe contener 10 dígitos. Intenta de nuevo.")
                 return
-            if not validar_id(odontologo.idOdontologo):
-                print("ID inválido. Debe contener solo dígitos. Intenta de nuevo.")
-                return
+            
             if not validar_longitud(odontologo.nombre, 120) and not validar_longitud(odontologo.primerApellido, 50) and not validar_longitud(odontologo.segundoApellido, 50):
                 print("Nombre o apellidos inválidos, los nombres o apellidos no son tan largos, creo. Intenta de nuevo.")
                 return
@@ -548,5 +563,3 @@ class Menu:
 
 #Ejecucion del menu
 Menu.ejecutar_menu_principal()
-
-
