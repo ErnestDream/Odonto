@@ -35,9 +35,9 @@ class Telefono:
         
     
     @staticmethod
-    def read(cursor, idOdontologo):
-        query='SELECT * FROM telefono WHERE idOdontologo = %s ;'
-        cursor.execute(query, (idOdontologo, ))
+    def read(cursor, idTelefono):
+        query='SELECT * FROM telefono WHERE idTelefono = %s ;'
+        cursor.execute(query, (idTelefono, ))
         return cursor.fetchone()
         
     
@@ -62,14 +62,12 @@ class Telefono:
         return cursor.fetchone()
         
     
-    def delete(conn, cursor, idOdontologo):
+    def delete(conn, cursor, idTelefono):
         print("Datos borrados:")
-        resultado = Telefono.read(cursor, idOdontologo)
-        print("Datos del telefono:")
-        print(f"Telefono: {resultado[1]}")
+        resultado = Telefono.read(cursor, idTelefono)
         
         query = "DELETE FROM telefono WHERE idTelefono = %s"
-        cursor.execute(query, (idOdontologo,))
+        cursor.execute(query, (idTelefono,))
         conn.commit()
         return cursor.rowcount
 
