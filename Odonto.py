@@ -1,6 +1,7 @@
 import psycopg2
 import re
 from datetime import datetime
+import sys
 
 from Odontologo import Odontologo
 from Paciente import Paciente
@@ -115,6 +116,17 @@ def id_automatico(idTabla, nombreTabla):
         return id_ultimo[0] + 1
     return 1
 
+def interrupcion_programa():
+    """
+    Se ejecuta antes de salir del programa, evita que se rompa con ctrl+C
+    """
+    if conn:
+        cursor.close()
+        conn.close()
+        print("Conexión cerrada.")
+    print("Saliendo del programa...")
+    sys.exit(0)
+
 class Menu:
     @staticmethod
     def mostrar_menu_principal():
@@ -150,52 +162,58 @@ class Menu:
         """
         Ejecuta el menú principal de la aplicación dependiendo de las opciones dadas por el usuario.
         """
+        try:
+            while True:
+                Menu.mostrar_menu_principal()
+                opcion = input("Selecciona una opción: ")
 
-        while True:
-            Menu.mostrar_menu_principal()
-            opcion = input("Selecciona una opción: ")
-
-            if opcion == "1":
-                Menu.ejecutar_menu_crud("Odontólogo")
-            elif opcion == "2":
-                Menu.ejecutar_menu_crud("Paciente")
-            elif opcion == "3":
-                Menu.ejecutar_menu_crud("Consulta")
-            elif opcion == "4":
-                Menu.ejecutar_menu_crud("Pasante")
-            elif opcion == "5":
-                Menu.ejecutar_menu_crud("Profesional")
-            elif opcion == "6":
-                Menu.ejecutar_menu_crud("Teléfono")
-            elif opcion == "7":
-                print("Saliendo del programa...")
-                break
-            else:
-                print("Opción no válida. Intenta de nuevo.")
+                if opcion == "1":
+                    Menu.ejecutar_menu_crud("Odontólogo")
+                elif opcion == "2":
+                    Menu.ejecutar_menu_crud("Paciente")
+                elif opcion == "3":
+                    Menu.ejecutar_menu_crud("Consulta")
+                elif opcion == "4":
+                    Menu.ejecutar_menu_crud("Pasante")
+                elif opcion == "5":
+                    Menu.ejecutar_menu_crud("Profesional")
+                elif opcion == "6":
+                    Menu.ejecutar_menu_crud("Teléfono")
+                elif opcion == "7":
+                    print("Saliendo del programa...")
+                    break
+                else:
+                    print("Opción no válida. Intenta de nuevo.")
+        except KeyboardInterrupt:
+            print("\nInterrupción del usuario.")
+            interrupcion_programa()
 
     @staticmethod
     def ejecutar_menu_crud(nombre_clase):
         """
         Ejecuta alguna de las operaciones CRUD para la clase especificada con la opción dada por el usuario.
         """
+        try:
+            while True:
+                Menu.mostrar_menu_crud(nombre_clase)
+                opcion = input("Selecciona una opción: ")
 
-        while True:
-            Menu.mostrar_menu_crud(nombre_clase)
-            opcion = input("Selecciona una opción: ")
-
-            if opcion == "1":
-                Menu.crear_registro(nombre_clase)
-            elif opcion == "2":
-                Menu.leer_registro(nombre_clase)
-            elif opcion == "3":
-                Menu.actualizar_registro(nombre_clase)
-            elif opcion == "4":
-                Menu.eliminar_registro(nombre_clase)
-            elif opcion == "5":
-                print("Volviendo al Menú Principal...")
-                break
-            else:
-                print("Opción no válida. Intenta de nuevo.")
+                if opcion == "1":
+                    Menu.crear_registro(nombre_clase)
+                elif opcion == "2":
+                    Menu.leer_registro(nombre_clase)
+                elif opcion == "3":
+                    Menu.actualizar_registro(nombre_clase)
+                elif opcion == "4":
+                    Menu.eliminar_registro(nombre_clase)
+                elif opcion == "5":
+                    print("Volviendo al Menú Principal...")
+                    break
+                else:
+                    print("Opción no válida. Intenta de nuevo.")
+        except KeyboardInterrupt:
+            print("\nInterrupción del usuario.")
+            interrupcion_programa()
 
     @staticmethod
     def crear_registro(nombre_clase):
