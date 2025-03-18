@@ -50,11 +50,11 @@ def conexionBD(dbname, user, password, host, port):
     ------------------------> MODIFICAR AQUI <------------------------
 """
 conn, cursor = conexionBD(
-    dbname = 'odonto',
-    user = 'postgres',
-    password = 'posgresito',
+    dbname = 'db',
+    user = 'usuario',
+    password = 'password',
     host = 'localhost',
-    port = '5432'
+    port = '1111'
 )
 
 def validar_nombre(nombre):
