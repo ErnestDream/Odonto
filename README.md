@@ -1,6 +1,4 @@
-# PythonE2JEGC
-
-Título del Proyecto: Odonto -> Sistema de gestion de pacientes de un consultorio dental.
+# Odonto: Sistema de gestion de un consultorio dental.
 
 Descripción: El propósito del proyecto es poner en práctica las cuestiones aprendidas en el curso de Python 2, se busca hacer un programa bien hecho que realice un CRUD, con la principal característica de que contará con una conexión a una base de datos en Postgresql
 
